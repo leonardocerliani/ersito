@@ -419,15 +419,15 @@ knitr::opts_chunk$set(comment = NA, tidy = FALSE, warning = FALSE, message = FAL
 <div id="create-a-git-repo-and-add-the-remote" class="section level3">
 <h3>Create a git repo and add the remote</h3>
 <ol start="0" style="list-style-type: decimal">
-<li><p>Create a new directory <code>public</code> which will be synchronized with the github repo. This is necessary since the <code>_site</code> folder is deleted and recreated every time, therefore also the <code>.git</code> inside it.</p></li>
-<li><p>go to <code>public</code>, initiate a new git, and switch to the gh-pages branch.</p></li>
+<li><p>Create a new directory <code>_public</code> which will be synchronized with the github repo. This is necessary since the <code>_site</code> folder is deleted and recreated every time, therefore also the <code>.git</code> inside it.</p></li>
+<li><p>go to <code>_public</code>, initiate a new git, and switch to the gh-pages branch.</p></li>
 </ol>
 <pre><code>git init
 git checkout -b gh-pages</code></pre>
 <ol start="2" style="list-style-type: decimal">
-<li>cp the whole content of <code>_site</code> inside <code>public</code> (later this will be automatised in the bash script that pushes the new versions of the website).</li>
+<li>cp the whole content of <code>_site</code> inside <code>_public</code> (later this will be automatised in the bash script that pushes the new versions of the website).</li>
 </ol>
-<pre><code>cp -r _site/* public/</code></pre>
+<pre><code>cp -r _site/* _public/</code></pre>
 <ol start="3" style="list-style-type: decimal">
 <li><p>create a github repo and <em>do not add the README.md</em></p></li>
 <li><p>git add, commit, add remote and push</p></li>
@@ -442,15 +442,12 @@ git push origin gh-pages</code></pre>
 </div>
 <div id="add-new-pages-to-the-website" class="section level3">
 <h3>Add new pages to the website</h3>
-<p>After creating the page with <code>rmarkdown::render_site()</code> you just need to push the content of the <code>public</code> folder (which is synchronized to the <a href="https://github.com/leonardocerliani/ersito">github repo</a>).</p>
-</div>
-<div id="script-to-update-the-website" class="section level3">
-<h3>Script to update the website</h3>
-<p>To be placed - and run - within the root directory <em>after</em> <code>rmarkdown::render_site()</code> has completed.</p>
-<p><code>dogit.sh</code></p>
+<p>After creating the page with <code>rmarkdown::render_site()</code> you just need to push the content of the <code>_public</code> folder (which is synchronized to the <a href="https://github.com/leonardocerliani/ersito">github repo</a>).</p>
+<p>Before that of course you need to copy the whole content of <code>_site</code> - after <em>after</em> <code>rmarkdown::render_site()</code> has completed - to <code>_public</code>. I suggest to automatise the whole thing with a small bash script to be placed and run from the root directory:</p>
+<p><code>_dogit.sh</code></p>
 <pre><code>#!/bin/bash
-cp -r _site/*  public/
-cd public
+cp -r _site/*  _public/
+cd _public
 git add .
 git commit -m &quot;golive&quot;
 git push origin gh-pages
