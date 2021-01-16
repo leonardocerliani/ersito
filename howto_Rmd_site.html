@@ -363,7 +363,7 @@ div.tocify {
   <a href="index.html">About</a>
 </li>
 <li>
-  <a href="rants.html">Rants</a>
+  <a href="posts.html">Posts</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -385,8 +385,8 @@ div.tocify {
 
 
 <p>This website was built using <a href="https://bookdown.org/yihui/rmarkdown/rmarkdown-site.html">rmarkdown’s site generator</a>. Most of the information here come from there.</p>
-<div id="generate-the-basic-website-structure" class="section level3">
-<h3>Generate the basic website structure</h3>
+<div id="basic-website-structure" class="section level3">
+<h3>Basic website structure</h3>
 <p>Create a <code>_site.yml</code> file with the following:</p>
 <pre><code>name: &quot;LC space&quot;
 navbar:
@@ -416,8 +416,8 @@ This is the folder that has to be served e.g. with Github pages.</p>
 <pre><code>{r setup, include = FALSE}
 knitr::opts_chunk$set(comment = NA, tidy = FALSE, warning = FALSE, message = FALSE, include=T, cache = TRUE)</code></pre>
 </div>
-<div id="create-a-git-repo-and-add-the-remote" class="section level3">
-<h3>Create a git repo and add the remote</h3>
+<div id="create-the-git-repo" class="section level3">
+<h3>Create the git repo</h3>
 <ol start="0" style="list-style-type: decimal">
 <li><p>Create a new directory <code>_public</code> which will be synchronized with the github repo. This is necessary since the <code>_site</code> folder is deleted and recreated every time, therefore also the <code>.git</code> inside it.</p></li>
 <li><p>go to <code>_public</code>, initiate a new git, and switch to the gh-pages branch.</p></li>
@@ -453,6 +453,11 @@ git commit -m &quot;golive&quot;
 git push origin gh-pages
 cd ..</code></pre>
 <p><strong>NB:</strong> The reason to use the underscore in front of the <code>_public</code> and <code>_dogit.sh</code> is to prevent markdown to copy them to the rendered website directory.</p>
+</div>
+<div id="pulling-from-the-github" class="section level3">
+<h3>Pulling from the github</h3>
+<p>If you ever need to <em>pull</em> from the github repo online, remember to pull from the <code>gh-pages</code> branch:</p>
+<p><code>git pull origin gh-pages</code></p>
 </div>
 
 
