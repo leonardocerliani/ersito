@@ -14,7 +14,6 @@
 
 <title>ANTsR TUT</title>
 
-<script src="site_libs/header-attrs-2.6/header-attrs.js"></script>
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
@@ -399,7 +398,7 @@ r16 = antsImageRead( getANTsRData( &quot;r16&quot; ) )
 r64 = antsImageRead( getANTsRData( &quot;r64&quot; ) )</code></pre>
 </div>
 <div id="visualization" class="section level1 tabset">
-<h1 class="tabset">Visualization</h1>
+<h1>Visualization</h1>
 <div id="define-functions-for-plotting" class="section level2">
 <h2>Define functions for plotting</h2>
 <pre class="r"><code># Only one image
@@ -457,7 +456,7 @@ antsplot.canny &lt;- function(bg, olay, alpha=1){
 </div>
 </div>
 <div id="estimate-registration" class="section level1 tabset">
-<h1 class="tabset">Estimate Registration</h1>
+<h1>Estimate Registration</h1>
 <p>See <code>?antsRegistration()</code> for different typesofTransform</p>
 <div id="translation" class="section level2">
 <h2>Translation</h2>
@@ -539,7 +538,7 @@ plot( nparameters, MI, type=&#39;l&#39;, main=&#39;Similarity vs number of param
 <p><img src="ANTsR_TUT_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
 </div>
 <div id="jacobian-determinant-image" class="section level1 tabset">
-<h1 class="tabset">Jacobian determinant image</h1>
+<h1>Jacobian determinant image</h1>
 <p>From Brian Avants’ notebook on antsRegistration:</p>
 <p>“What does “differentiable map with differentiable inverse” mean? The diffeomorphism is like a road between the two images - we can go back and forth along it.</p>
 <p>It also means that if we compose the mapping from A to B with the mapping from B to A, we get the identity.</p>
@@ -596,13 +595,13 @@ print( t.test( syn_reg_jac[ mask == 1 ], synCC_reg_jac[ mask == 1], paired=TRUE 
     Paired t-test
 
 data:  syn_reg_jac[mask == 1] and synCC_reg_jac[mask == 1]
-t = 24.514, df = 19684, p-value &lt; 2.2e-16
+t = 25.84, df = 19684, p-value &lt; 2.2e-16
 alternative hypothesis: true difference in means is not equal to 0
 95 percent confidence interval:
- 0.05962228 0.06998564
+ 0.06854937 0.07980235
 sample estimates:
 mean of the differences 
-             0.06480396 </code></pre>
+             0.07417586 </code></pre>
 <pre class="r"><code>library( ggplot2 )
 
 n = sum( mask == 1)
@@ -615,7 +614,7 @@ mydf = data.frame(
 ggplot( mydf, aes(jacobian, fill=registration )) + geom_density(alpha = 0.2)</code></pre>
 <p><img src="ANTsR_TUT_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
 <div id="you-can-also-visualize-the-jacobian-determinant-image" class="section level2 tabset">
-<h2 class="tabset">You can also visualize the jacobian determinant image</h2>
+<h2>You can also visualize the jacobian determinant image</h2>
 <div id="jac-of-syn" class="section level3">
 <h3>jac of SyN</h3>
 <pre class="r"><code>antsplot.single(syn_reg_jac)</code></pre>
