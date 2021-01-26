@@ -9,10 +9,9 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="LC" />
 
 
-<title>how to make this website</title>
+<title>feat_native procedure</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -376,87 +375,186 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">how to make this website</h1>
-<h4 class="author">LC</h4>
-<h4 class="date">26 January, 2021</h4>
+<h1 class="title toc-ignore">feat_native procedure</h1>
 
 </div>
 
 
-<p>This website was built using <a href="https://bookdown.org/yihui/rmarkdown/rmarkdown-site.html">rmarkdown’s site generator</a>. Most of the information here come from there.</p>
-<div id="basic-website-structure" class="section level3">
-<h3>Basic website structure</h3>
-<p>Create a <code>_site.yml</code> file with the following:</p>
-<pre><code>name: &quot;LC space&quot;
-navbar:
-  title: &quot;LC&quot;
-  left:
-    - text: &quot;About&quot;
-      href: index.html
-    - text: &quot;Rants&quot;
-      href: rants.html
-      </code></pre>
-<p>Note that the files in the nav have extension <code>html</code> while we will write the pages in <code>md</code> or <code>Rmd</code> files.</p>
-<p>Create two files <code>index.md</code> and <code>rants.md</code> with the title, such as:</p>
-<pre><code>---
-title: &quot;my rants&quot;
----
-
-ciao!</code></pre>
-<p>Note that <em>all</em> the Rmd files should be in the root directory!</p>
-<p>At this point you can generate the website with the command:</p>
-<pre><code>rmarkdown::render_site()</code></pre>
-<p>The compiled version will be in the <code>_site</code> folder.<br />
-This is the folder that has to be served e.g. with Github pages.</p>
+<pre><code>gitdir = &quot;/data00/layerfMRI/Github_repo/layerfMRI/&quot;
+bd = gitdir + /analyses/depth_native/02_feat_native/</code></pre>
+<p><br />
+</p>
+<div id="ev-preparation" class="section level2">
+<h2>EV preparation</h2>
+<p>The summary of all log files is in <code>log.summary.csv</code> (prepared by Lorenzo). This table is parsed with <code>do_EV_native_preparation.py</code> to derive one EV in fsl format for each <code>sub/session/task/run/movietype</code>.</p>
+<pre><code>python do_EV_native_preparation.py</code></pre>
+<p>The EVs are saved in the <code>EV_predictors</code> directory. Since the process had already been run initially for the PPI analysis, I also wrote a little script that carries out a check to verify that the EVs written now and then are identical.</p>
+<pre><code>$PWD/compare_EV.sh</code></pre>
+<p><br />
+</p>
 </div>
-<div id="caching-the-content" class="section level3">
-<h3>Caching the content</h3>
-<p>Some Rmd can contain long operations which have to be re-run every time the website is rebuilt. To avoid this, we can place the following R chunk at the beginning of the Rmd notebook.</p>
-<pre><code>{r setup, include = FALSE}
-knitr::opts_chunk$set(comment = NA, tidy = FALSE, warning = FALSE, message = FALSE, include=T, cache = TRUE)</code></pre>
+<div id="prepare-feat-.fsf-onerun" class="section level2 tabset">
+<h2>Prepare FEAT .fsf onerun</h2>
+<p>To carry out the FEAT for all subs and run, I build a template using the <code>sub_02_task_1_run_1</code>. This will be then dynamically modified in <code>sed</code> for every sub/run. Finally feat will be run in parallel on all the .fsf files.</p>
+<p>First I manually create an empty directory <code>000_subj_level_feat</code>.</p>
+<pre><code>mkdir 000_subj_level_feat</code></pre>
+<p>Then we need to work in the Feat gui in x2go to create a sample fsf that we will save in <code>000_template_fsf_onesubrun</code> as <code>sub_02_task_1_run_1.fsf</code>.</p>
+<div id="data" class="section level3">
+<h3>Data</h3>
+<p>It is important to correctly specify the following parameters in the gui:</p>
+<ul>
+<li><p>output dir : <code>bd + /000_subj_level_feat/ +  /sub_02_task_1_run_1.feat/</code></p></li>
+<li><p>fmri data : <code>/data00/layerfMRI/regdata/sub_02/ses_01/func/task_1_run_1_4D</code></p></li>
+</ul>
+<p><strong>NB</strong>: the fmri data is <code>task_1_run_1_4D</code>. Be very careful <em>not</em> to use the MNI counterpart.</p>
+<p>Note that the fmri data comes from the original directory. There is no need to duplicate it here.</p>
 </div>
-<div id="create-the-git-repo" class="section level3">
-<h3>Create the git repo</h3>
-<ol start="0" style="list-style-type: decimal">
-<li><p>Create a new directory <code>_public</code> which will be synchronized with the github repo. This is necessary since the <code>_site</code> folder is deleted and recreated every time, therefore also the <code>.git</code> inside it.</p></li>
-<li><p>go to <code>_public</code>, initiate a new git, and switch to the gh-pages branch.</p></li>
-</ol>
-<pre><code>git init
-git checkout -b gh-pages</code></pre>
-<ol start="2" style="list-style-type: decimal">
-<li>cp the whole content of <code>_site</code> inside <code>_public</code> (later this will be automatised in the bash script that pushes the new versions of the website).</li>
-</ol>
-<pre><code>cp -r _site/* _public/</code></pre>
-<ol start="3" style="list-style-type: decimal">
-<li><p>create a github repo and <em>do not add the README.md</em></p></li>
-<li><p>git add, commit, add remote and push</p></li>
-</ol>
-<pre><code>git add .
-git commit -m &quot;golive&quot;
-git remote add origin https://github.com/leonardocerliani/ersito.git
-git push origin gh-pages</code></pre>
-<ol start="5" style="list-style-type: decimal">
-<li>The website is now live at <a href="https://leonardocerliani.github.io/ersito/" class="uri">https://leonardocerliani.github.io/ersito/</a></li>
-</ol>
+<div id="pre-stats" class="section level3">
+<h3>Pre-stats</h3>
+<p>Since we are using raw data, there is also a minimal preprocessing to carry out. Basically motion correction (MCFLIRT) and highpass filtering. Make sure you set:</p>
+<ul>
+<li>Slice timing correction : None</li>
+<li>BET brain extraction : unchecked</li>
+<li>Spatial smooting FWHM (mm) : 0.0</li>
+</ul>
 </div>
-<div id="add-new-pages-to-the-website" class="section level3">
-<h3>Add new pages to the website</h3>
-<p>After creating the page with <code>rmarkdown::render_site()</code> you just need to push the content of the <code>_public</code> folder (which is synchronized to the <a href="https://github.com/leonardocerliani/ersito">github repo</a>).</p>
-<p>Before that of course you need to copy the whole content of <code>_site</code> - after <em>after</em> <code>rmarkdown::render_site()</code> has completed - to <code>_public</code>. I suggest to automatise the whole thing with a small bash script to be placed and run from the root directory:</p>
-<p><code>_dogit.sh</code></p>
-<pre><code>#!/bin/bash
-cp -r _site/*  _public/
-cd _public
-git add .
-git commit -m &quot;golive&quot;
-git push origin gh-pages
-cd ..</code></pre>
-<p><strong>NB:</strong> The reason to use the underscore in front of the <code>_public</code> and <code>_dogit.sh</code> is to prevent markdown to copy them to the rendered website directory.</p>
+<div id="registration" class="section level3">
+<h3>Registration</h3>
+<p>Uncheck everything: we don’t want to run any registration (we suffered enough with ANTs for this)</p>
 </div>
-<div id="pulling-from-the-github" class="section level3">
-<h3>Pulling from the github</h3>
-<p>If you ever need to <em>pull</em> from the github repo online, remember to pull from the <code>gh-pages</code> branch:</p>
-<p><code>git pull origin gh-pages</code></p>
+<div id="stats" class="section level3">
+<h3>Stats</h3>
+<p>There are <strong>two EVs</strong>: one for <strong>M(otion)</strong>, the other for <strong>S(crambled)</strong> (and their temporal derivatives). They are linked to the following EV_predictors</p>
+<ul>
+<li>EV Motion : <code>bd + EV_predictors/sub_02_EV_task_1_run_1_M.txt</code></li>
+<li>EV Scrambled : <code>bd + EV_predictors/sub_02_EV_task_1_run_1_S.txt</code></li>
+</ul>
+<p>The Contrast matrix contains <strong>4 contrasts</strong>:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Title</th>
+<th>EV1</th>
+<th>EV2</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>MOTION</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td>SCRAMBLED</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<td>M &gt; S</td>
+<td>1</td>
+<td>-1</td>
+</tr>
+<tr class="even">
+<td>S &gt; M</td>
+<td>-1</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="post-stats" class="section level3">
+<h3>Post-stats</h3>
+<p>We want to run the analyses - and resolve the MCP problem - <em>only within the cortex</em>.</p>
+<p>To do this, we use the <code>sub/taskrun</code>-specific cortical depth maps we previously created, which are already stored in:</p>
+<pre><code>/data_native/sub_02/depth/sub_02_depth_task_1_run_1.nii.gz</code></pre>
+<p>So we point the pre-thresholding masking to this file.</p>
+</div>
+</div>
+<div id="section" class="section level2">
+<h2></h2>
+<p><br />
+</p>
+</div>
+<div id="prepare-feat-template-fsf" class="section level2">
+<h2>Prepare FEAT template FSF</h2>
+<p>We cp the single-subject fsf to a template_design.FSF</p>
+<pre><code>cp 000_template_fsf_onesubrun/sub_02_task_1_run_1.fsf \
+   000_template_design.FSF</code></pre>
+<p>and replace the actual values in the first column with the placeholder in the second column:</p>
+<table>
+<thead>
+<tr class="header">
+<th><code>sub_02_task_1_run_1.fsf</code></th>
+<th><code>000_template_design.FSF</code></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>set fmri(outputdir)</code></td>
+<td><code>"OUTPUTFEATDIR"</code></td>
+</tr>
+<tr class="even">
+<td><code>set fmri(npts)</code></td>
+<td><code>NUMBATIMEPOINTS</code></td>
+</tr>
+<tr class="odd">
+<td><code>set fmri(totalVoxels)</code></td>
+<td><code>TOTALNUMBAVOXELS</code></td>
+</tr>
+<tr class="even">
+<td><code>set feat_files(1)</code></td>
+<td><code>"NII4D"</code></td>
+</tr>
+<tr class="odd">
+<td><code>set fmri(custom1)</code></td>
+<td><code>"EVMOTION"</code></td>
+</tr>
+<tr class="even">
+<td><code>set fmri(custom2)</code></td>
+<td><code>"EVSCRAMBLED"</code></td>
+</tr>
+<tr class="odd">
+<td><code>set fmri(threshmask)</code></td>
+<td><code>"DEPTHMAP"</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>NB</strong>: careful to the “double quotes” for files placeholders.</p>
+<p><br />
+</p>
+</div>
+<div id="running-feat" class="section level2">
+<h2>Running feat</h2>
+<p>The feat for each subj/taskrun is carried out by the <code>000_run_1st_level.sh</code> executable bash script. The script does the following:</p>
+<ol style="list-style-type: decimal">
+<li><p>grab a list of subjects in <code>/data00/layerfMRI/list_subjects</code></p></li>
+<li><p>grab the <code>000_template_design.FSF</code> and <code>sed</code>-replace the placeholders in it with the appropriate files/values for each sub/taskrun, then writes the fsf in the <code>000_subj_level_feat</code> folder</p></li>
+<li><p>create a bash array of all the .fsf files in <code>000_subj_level_feat</code> and a function to run one feat</p></li>
+<li><p>run all the feat .fsf in parallel - 10 at a time because of RAM limitations.</p></li>
+</ol>
+<p><strong>ETA is ~ 3hrs</strong></p>
+<p><br />
+## Copy Zstat to data_native Once all the first-level analyses have been carried out, it’s time to copy the final zstats for each taskrun into the <code>/data_native</code> folder. This is achieved by:</p>
+<pre><code>do_cp_Zstat_2_data_native.sh</code></pre>
+<p>The final structure (of the Zstat) for one subject in <code>/data_native</code> will be like the following:</p>
+<pre><code>sub_02
+└── Zstat
+    ├── task_1_run_1
+    │   ├── zstat1.nii.gz
+    │   ├── zstat2.nii.gz
+    │   ├── zstat3.nii.gz
+    │   └── zstat4.nii.gz
+    ├── task_1_run_2
+    │   ├── zstat1.nii.gz
+    │   ├── zstat2.nii.gz
+    │   ├── zstat3.nii.gz
+    │   └── zstat4.nii.gz
+    ...
+    └── task_4_run_2
+        ├── zstat1.nii.gz
+        ├── zstat2.nii.gz
+        ├── zstat3.nii.gz
+        └── zstat4.nii.gz</code></pre>
 </div>
 
 
