@@ -378,7 +378,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">ANTsR TUT</h1>
 <h4 class="author">Leonardo Cerliani</h4>
-<h4 class="date">26 January, 2021</h4>
+<h4 class="date">18 February, 2021</h4>
 
 </div>
 
@@ -442,17 +442,17 @@ antsplot.canny &lt;- function(bg, olay, alpha=1){
 <div id="plot-single-image" class="section level2">
 <h2>Plot single image</h2>
 <pre class="r"><code>antsplot.single(r16)</code></pre>
-<p><img src="ANTsR_TUT_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p><img src="ANTsR_TUT_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
 </div>
 <div id="plot-overlay-with-transparency" class="section level2">
 <h2>Plot overlay with transparency</h2>
 <pre class="r"><code>antsplot.olay(r16,r64)</code></pre>
-<p><img src="ANTsR_TUT_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p><img src="ANTsR_TUT_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
 </div>
 <div id="plot-borders-of-overlay" class="section level2">
 <h2>Plot borders of overlay</h2>
 <pre class="r"><code>antsplot.canny(r16,r64)</code></pre>
-<p><img src="ANTsR_TUT_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p><img src="ANTsR_TUT_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
 </div>
 </div>
 <div id="estimate-registration" class="section level1 tabset">
@@ -472,7 +472,7 @@ readAntsrTransform(trans_reg$fwdtransforms)</code></pre>
   Precision     : float 
   Type          : AffineTransform </code></pre>
 <pre class="r"><code>antsplot.canny(r16, trans_reg$warpedmovout)</code></pre>
-<p><img src="ANTsR_TUT_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p><img src="ANTsR_TUT_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
 </div>
 <div id="rigid-registration" class="section level2">
 <h2>Rigid registration</h2>
@@ -484,7 +484,7 @@ readAntsrTransform(trans_reg$fwdtransforms)</code></pre>
 
 
 antsplot.canny(r16, rigid_reg$warpedmovout)</code></pre>
-<p><img src="ANTsR_TUT_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p><img src="ANTsR_TUT_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
 </div>
 <div id="affine-registration" class="section level2">
 <h2>Affine registration</h2>
@@ -496,7 +496,7 @@ antsplot.canny(r16, rigid_reg$warpedmovout)</code></pre>
 )
 
 antsplot.canny(r16, affine_reg$warpedmovout)</code></pre>
-<p><img src="ANTsR_TUT_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p><img src="ANTsR_TUT_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
 </div>
 <div id="syn-registration" class="section level2">
 <h2>SyN registration</h2>
@@ -507,7 +507,7 @@ antsplot.canny(r16, affine_reg$warpedmovout)</code></pre>
 )
 
 antsplot.canny(r16, syn_reg$warpedmovout)</code></pre>
-<p><img src="ANTsR_TUT_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p><img src="ANTsR_TUT_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
 </div>
 <div id="syncc-registration" class="section level2">
 <h2>SyNCC registration</h2>
@@ -518,7 +518,7 @@ antsplot.canny(r16, syn_reg$warpedmovout)</code></pre>
 )
 
 antsplot.canny(r16, synCC_reg$warpedmovout)</code></pre>
-<p><img src="ANTsR_TUT_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p><img src="ANTsR_TUT_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
 </div>
 </div>
 <div id="mutual-information-metric" class="section level1">
@@ -535,7 +535,7 @@ antsplot.canny(r16, synCC_reg$warpedmovout)</code></pre>
 
 nparameters = c( 0, 2, 4, 8, 16, 32 )
 plot( nparameters, MI, type=&#39;l&#39;, main=&#39;Similarity vs number of parameters&#39; )</code></pre>
-<p><img src="ANTsR_TUT_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<p><img src="ANTsR_TUT_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
 </div>
 <div id="jacobian-determinant-image" class="section level1 tabset">
 <h1>Jacobian determinant image</h1>
@@ -551,7 +551,7 @@ plot( nparameters, MI, type=&#39;l&#39;, main=&#39;Similarity vs number of param
                           )
 
 invisible(plot( grid_fw ))</code></pre>
-<p><img src="ANTsR_TUT_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<p><img src="ANTsR_TUT_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
 </div>
 <div id="inverse-warpfield" class="section level2">
 <h2>Inverse warpfield</h2>
@@ -560,7 +560,7 @@ invisible(plot( grid_fw ))</code></pre>
                                  transform = syn_reg$invtransforms[2] 
                               )
 invisible(plot( grid_backwd ))</code></pre>
-<p><img src="ANTsR_TUT_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<p><img src="ANTsR_TUT_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
 </div>
 <div id="composition-of-forward-and-inverse" class="section level2">
 <h2>Composition of forward and inverse</h2>
@@ -571,7 +571,7 @@ invidmap = antsApplyTransforms( r16, emptygrid,
    whichtoinvert = c( T,F,F,F ))  # tricky stuff here
 
 invisible(plot( invidmap ))</code></pre>
-<p><img src="ANTsR_TUT_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<p><img src="ANTsR_TUT_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
 <p>“This “inverse identity” constraint is built into SyN such that we enforce consistency in the digital domain.</p>
 <p>What this means is - any “shape change” is encoded losslessly into the deformation field.</p>
 <p><strong>Non-diffeomorphic</strong> maps may lose information or may be completely uninterpretable, statistically.</p>
@@ -595,13 +595,13 @@ print( t.test( syn_reg_jac[ mask == 1 ], synCC_reg_jac[ mask == 1], paired=TRUE 
     Paired t-test
 
 data:  syn_reg_jac[mask == 1] and synCC_reg_jac[mask == 1]
-t = 25.84, df = 19684, p-value &lt; 2.2e-16
+t = 22, df = 19684, p-value &lt;2e-16
 alternative hypothesis: true difference in means is not equal to 0
 95 percent confidence interval:
- 0.06854937 0.07980235
+ 0.050 0.059
 sample estimates:
 mean of the differences 
-             0.07417586 </code></pre>
+                  0.054 </code></pre>
 <pre class="r"><code>library( ggplot2 )
 
 n = sum( mask == 1)
@@ -612,18 +612,18 @@ mydf = data.frame(
   jacobian = c( synCC_reg_jac[ mask == 1 ], syn_reg_jac[ mask == 1] ) )
 
 ggplot( mydf, aes(jacobian, fill=registration )) + geom_density(alpha = 0.2)</code></pre>
-<p><img src="ANTsR_TUT_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<p><img src="ANTsR_TUT_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
 <div id="you-can-also-visualize-the-jacobian-determinant-image" class="section level2 tabset">
 <h2>You can also visualize the jacobian determinant image</h2>
 <div id="jac-of-syn" class="section level3">
 <h3>jac of SyN</h3>
 <pre class="r"><code>antsplot.single(syn_reg_jac)</code></pre>
-<p><img src="ANTsR_TUT_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
+<p><img src="ANTsR_TUT_files/figure-html/unnamed-chunk-24-1.png" width="672" /></p>
 </div>
 <div id="jac-of-syncc" class="section level3">
 <h3>jac of SyNCC</h3>
 <pre class="r"><code>antsplot.single(synCC_reg_jac)</code></pre>
-<p><img src="ANTsR_TUT_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
+<p><img src="ANTsR_TUT_files/figure-html/unnamed-chunk-25-1.png" width="672" /></p>
 </div>
 </div>
 </div>

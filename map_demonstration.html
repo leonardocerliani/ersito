@@ -405,7 +405,9 @@ library(DT)
 options(digits=2)</code></pre>
 <p>Let’s say you collected data in 8 different runs of an experiment. For instance the time, in seconds, spent freezing, running or grooming in 10 participants after a given stimulus in each subsequent run.</p>
 <p>For our example we will create some random data. The code below creates 8 dataframes with 10 observations for three distinct variables. It already uses the <code>map</code> function that we are going to explain later, so for now you can just disregard it, and come back later to understand what it does as an excercise.</p>
-<pre class="r"><code>1:8 %&gt;% map( function(x) {
+<pre class="r"><code>system(&quot;rm *.csv&quot;)
+
+1:8 %&gt;% map( function(x) {
   tibble(
     SUBID = map(1:10, ~ paste0(&quot;sub_&quot;,.x) ) %&gt;% unlist(),
     freezing = runif(10)*10 * log(x+1),
@@ -415,22 +417,21 @@ options(digits=2)</code></pre>
     write_csv(paste0(&quot;run_&quot;,x,&quot;.csv&quot;))
 })</code></pre>
 <p>We obtain 8 csv files with our data.</p>
-<pre class="r"><code>myfiles &lt;- list.files(pattern = &quot;.csv&quot;, full.names = T)
+<pre class="r"><code>myfiles &lt;- list.files(pattern = &quot;.csv&quot;)
 myfiles</code></pre>
-<pre><code>## [1] &quot;./run_1.csv&quot; &quot;./run_2.csv&quot; &quot;./run_3.csv&quot; &quot;./run_4.csv&quot; &quot;./run_5.csv&quot; &quot;./run_6.csv&quot; &quot;./run_7.csv&quot;
-## [8] &quot;./run_8.csv&quot;</code></pre>
+<pre><code>## [1] &quot;run_1.csv&quot; &quot;run_2.csv&quot; &quot;run_3.csv&quot; &quot;run_4.csv&quot; &quot;run_5.csv&quot; &quot;run_6.csv&quot; &quot;run_7.csv&quot; &quot;run_8.csv&quot;</code></pre>
 <pre class="r"><code>read.csv(&quot;run_1.csv&quot;)</code></pre>
 <pre><code>##     SUBID freezing running grooming
-## 1   sub_1     6.52    1.03      6.6
-## 2   sub_2     0.32    9.00      7.1
-## 3   sub_3     3.66    2.46      5.4
-## 4   sub_4     6.19    0.42      5.9
-## 5   sub_5     3.82    3.28      2.9
-## 6   sub_6     3.17    9.55      1.5
-## 7   sub_7     6.63    8.90      9.6
-## 8   sub_8     3.14    6.93      9.0
-## 9   sub_9     4.70    6.41      6.9
-## 10 sub_10     3.97    9.94      8.0</code></pre>
+## 1   sub_1     1.78    7.97     1.03
+## 2   sub_2     4.79    9.53     3.50
+## 3   sub_3     4.32    1.70     1.91
+## 4   sub_4     3.29    0.77     6.82
+## 5   sub_5     3.08    2.30     6.06
+## 6   sub_6     2.97    4.84     2.02
+## 7   sub_7     4.88    3.40     6.17
+## 8   sub_8     4.88    0.74     0.86
+## 9   sub_9     0.79    4.34     5.23
+## 10 sub_10     1.92    1.58     2.63</code></pre>
 </div>
 <div id="purrrmap" class="section level2">
 <h2><code>purrr::map</code></h2>
@@ -469,8 +470,8 @@ for (run in 1:length(allruns)) {
 <pre class="r"><code>alldata &lt;- list(allruns, myfiles) %&gt;% pmap_df(~ .x %&gt;% mutate(run = .y))
 
 datatable(alldata, options = list(dom = &#39;tp&#39;))</code></pre>
-<div id="htmlwidget-1fddd34c683296988b0f" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-1fddd34c683296988b0f">{"x":{"filter":"none","data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56","57","58","59","60","61","62","63","64","65","66","67","68","69","70","71","72","73","74","75","76","77","78","79","80"],["sub_1","sub_2","sub_3","sub_4","sub_5","sub_6","sub_7","sub_8","sub_9","sub_10","sub_1","sub_2","sub_3","sub_4","sub_5","sub_6","sub_7","sub_8","sub_9","sub_10","sub_1","sub_2","sub_3","sub_4","sub_5","sub_6","sub_7","sub_8","sub_9","sub_10","sub_1","sub_2","sub_3","sub_4","sub_5","sub_6","sub_7","sub_8","sub_9","sub_10","sub_1","sub_2","sub_3","sub_4","sub_5","sub_6","sub_7","sub_8","sub_9","sub_10","sub_1","sub_2","sub_3","sub_4","sub_5","sub_6","sub_7","sub_8","sub_9","sub_10","sub_1","sub_2","sub_3","sub_4","sub_5","sub_6","sub_7","sub_8","sub_9","sub_10","sub_1","sub_2","sub_3","sub_4","sub_5","sub_6","sub_7","sub_8","sub_9","sub_10"],[6.51882246517147,0.315773591083119,3.66054830078015,6.18577744499734,3.82225625539018,3.1650121637771,6.63226335595008,3.14227292215297,4.69656175594365,3.96919228060535,0.270408962709318,5.24912525317605,8.33252968380153,2.37748417672047,3.49557565008446,2.54466934160837,1.56881859411264,4.55425698748169,4.54522628989477,4.05218145005216,11.2933089224126,6.21775674941785,11.2298764477579,11.2621099607992,11.0119228055491,6.09736188366086,10.4592465802663,8.72285706578358,9.84521858360349,0.00866119737978152,5.15620842589841,3.02077203174975,12.5905410721934,1.5063532002896,7.51251886231896,8.23236279581622,9.65644978081377,5.3565882393655,7.86392340893442,15.3616636440442,6.62035174135257,17.6348407761396,2.76293432675221,1.63128948909052,2.54263045767197,12.3632675796798,11.0955866799656,15.9716385021517,12.0585249696685,13.2066601648534,2.16183731574674,7.58894129618674,11.1293473208969,4.22053828404985,8.65478569113401,4.2419025466814,9.77429818015143,6.88666498159704,12.6481271727534,7.29159691162467,12.359019277005,10.008140047243,5.51120071707521,11.7403280410958,18.9892152633837,18.7539507090225,5.70113462090414,6.68504598608392,20.4958260015172,12.8923984477034,1.04727693623665,15.399316288991,7.7317836489963,8.98541803003451,18.0381442579338,20.1893594842447,6.20778190703297,21.1176307412848,16.0044613978538,15.0812019945214],[1.02924682665616,8.99824970401824,2.4608773435466,0.420595335308462,3.27920719282702,9.54503649147227,8.89539316063747,6.928034061566,6.40506813768297,9.94269776623696,1.52444747742265,1.3880606344901,2.33034099452198,4.65962450252846,2.65972640365362,8.57827715342864,0.458311666734517,4.42200074205175,7.98924845643342,1.2189925997518,4.75316574098542,2.20118885161355,3.79816537722945,6.12771003274247,3.51797909243032,1.11135424347594,2.43619472719729,6.6805558744818,4.17646779678762,7.88195834029466,4.829023971688,8.90350222121924,9.14438186911866,6.08734982321039,4.10689776530489,1.47094690939412,9.35299803270027,3.01228899974376,0.607205715496093,9.47726940037683,5.21135725779459,6.5983844967559,8.21805460145697,7.86281551700085,9.79821917368099,4.39431536244228,3.1170220207423,4.09474952612072,0.104671118315309,1.8384952400811,3.55445380788296,5.33687945455313,7.40334360394627,2.21102937823161,4.1274611861445,2.65686686849222,6.29973053466529,1.83828490786254,8.6364411143586,7.46568004135042,9.37314089154825,4.66532702324912,4.06832593260333,6.59230324206874,1.52346616843715,5.72867058217525,2.38726026844233,9.62358936434612,6.01365725975484,5.15029727248475,0.528439427725971,3.95220134640113,4.77845379849896,5.6025326368399,6.98261594865471,9.15683538420126,6.18351227371022,4.28421508753672,5.4208036721684,0.58478488586843],[6.55705799115822,7.08530468167737,5.44066024711356,5.9414202044718,2.8915973729454,1.47113647311926,9.63024232536554,9.02299045119435,6.90705278422683,7.95467417687178,5.60947983758524,2.0653138961643,1.27531650243327,7.53307864302769,8.95045359153301,3.74462775886059,6.65115194628015,0.948406609240919,3.83969637798145,2.7438364457339,1.02864644257352,4.34892741497606,9.84956979984418,8.93051114398986,8.86469060787931,1.75052650272846,1.30695691565052,6.53101925039664,3.43516472261399,6.56758127966896,7.20596273429692,1.42294295597821,5.49284656066447,9.5409123855643,5.85483353119344,4.04510281747207,6.4789347932674,3.19820617092773,3.07720010867342,2.19767631264403,8.42729318886995,2.31161782052368,2.39099955651909,0.766911653336138,2.45723678031936,7.3213520552963,8.47453165100887,4.97527267085388,3.87909029843286,2.46448994148523,6.68284649727866,6.18017873261124,3.72238060226664,5.29835685854778,8.74682342866436,5.81750099780038,8.39767764788121,3.12448164913803,7.0829032221809,2.65017806086689,4.02573342202231,8.80246541230008,3.64091864787042,2.88239280693233,1.70645235106349,1.72171746380627,4.8204260552302,2.52964928513393,2.1625478961505,6.74376388080418,2.60856857057661,3.97151953307912,1.97744736680761,8.3192756283097,1.52887222822756,8.03418542025611,5.46826156554744,6.62317642010748,1.71698493883014,6.33055359823629],["./run_1.csv","./run_1.csv","./run_1.csv","./run_1.csv","./run_1.csv","./run_1.csv","./run_1.csv","./run_1.csv","./run_1.csv","./run_1.csv","./run_2.csv","./run_2.csv","./run_2.csv","./run_2.csv","./run_2.csv","./run_2.csv","./run_2.csv","./run_2.csv","./run_2.csv","./run_2.csv","./run_3.csv","./run_3.csv","./run_3.csv","./run_3.csv","./run_3.csv","./run_3.csv","./run_3.csv","./run_3.csv","./run_3.csv","./run_3.csv","./run_4.csv","./run_4.csv","./run_4.csv","./run_4.csv","./run_4.csv","./run_4.csv","./run_4.csv","./run_4.csv","./run_4.csv","./run_4.csv","./run_5.csv","./run_5.csv","./run_5.csv","./run_5.csv","./run_5.csv","./run_5.csv","./run_5.csv","./run_5.csv","./run_5.csv","./run_5.csv","./run_6.csv","./run_6.csv","./run_6.csv","./run_6.csv","./run_6.csv","./run_6.csv","./run_6.csv","./run_6.csv","./run_6.csv","./run_6.csv","./run_7.csv","./run_7.csv","./run_7.csv","./run_7.csv","./run_7.csv","./run_7.csv","./run_7.csv","./run_7.csv","./run_7.csv","./run_7.csv","./run_8.csv","./run_8.csv","./run_8.csv","./run_8.csv","./run_8.csv","./run_8.csv","./run_8.csv","./run_8.csv","./run_8.csv","./run_8.csv"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>SUBID<\/th>\n      <th>freezing<\/th>\n      <th>running<\/th>\n      <th>grooming<\/th>\n      <th>run<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"tp","columnDefs":[{"className":"dt-right","targets":[2,3,4]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-c7a599b98de2acda2e89" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-c7a599b98de2acda2e89">{"x":{"filter":"none","data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56","57","58","59","60","61","62","63","64","65","66","67","68","69","70","71","72","73","74","75","76","77","78","79","80"],["sub_1","sub_2","sub_3","sub_4","sub_5","sub_6","sub_7","sub_8","sub_9","sub_10","sub_1","sub_2","sub_3","sub_4","sub_5","sub_6","sub_7","sub_8","sub_9","sub_10","sub_1","sub_2","sub_3","sub_4","sub_5","sub_6","sub_7","sub_8","sub_9","sub_10","sub_1","sub_2","sub_3","sub_4","sub_5","sub_6","sub_7","sub_8","sub_9","sub_10","sub_1","sub_2","sub_3","sub_4","sub_5","sub_6","sub_7","sub_8","sub_9","sub_10","sub_1","sub_2","sub_3","sub_4","sub_5","sub_6","sub_7","sub_8","sub_9","sub_10","sub_1","sub_2","sub_3","sub_4","sub_5","sub_6","sub_7","sub_8","sub_9","sub_10","sub_1","sub_2","sub_3","sub_4","sub_5","sub_6","sub_7","sub_8","sub_9","sub_10"],[1.77876707571039,4.79091907825352,4.32376824129731,3.29438990936741,3.08389137280518,2.97348085581299,4.8765158927536,4.87860106964562,0.792100790205471,1.92340953448474,0.082920776553476,0.865528571064522,0.568950172774582,5.02126948271912,4.62850732961187,7.47233765169293,8.32266698634113,7.44203772986508,0.622727027103055,10.0951373284959,11.6285850042669,9.56770850750597,13.4175664859624,12.6160552901386,13.5680334523953,0.619077193526746,2.61423518429994,6.73498473514065,1.17281428582308,6.61824186455429,12.0050108589475,12.7518295070112,11.0467543805649,0.312438004340711,14.4477134289093,9.81140518098668,7.29485323553555,15.2712865868336,15.6148817552244,5.00655932484511,8.44898464720469,16.2320703294704,8.85890744271706,1.28187672802507,7.01159997245744,3.31613431725447,2.91952674884401,4.16083404576017,16.48660833711,14.7419811888605,4.85409847878295,18.6954063064447,8.329191971772,15.562294134257,11.0287436163175,18.9731535185329,1.20466447106475,16.908312194193,4.96531254878419,12.7414248510773,1.49088675778483,7.1135851421741,13.2753195620847,4.06797013551408,7.03759765917166,0.504549849613366,10.165077605594,13.5650869218138,9.21158218989762,10.9729003555966,18.6439267714085,2.85141983911818,3.4117569308392,20.4901439344428,15.6114446000821,21.64815952026,4.60539695528169,4.0462364031492,10.3020385201788,11.5867135159035],[7.96725463587791,9.53253078972921,1.70342134777457,0.765570842195302,2.30189610272646,4.84404405811802,3.39976806659251,0.737101912964135,4.33500998653471,1.57541054068133,1.47392882965505,0.0706891971640289,7.03672781586647,9.2298385524191,3.55361340334639,7.59363383520395,0.929149526637048,2.73972942493856,2.86290395539254,9.50105483643711,5.30249783536419,2.584227938205,6.16982593433931,8.35332431597635,9.1551343165338,8.74959186185151,3.87878825189546,0.457524175290018,6.13205395638943,3.65960312541574,2.03028343617916,5.35864087287337,5.80872107762843,3.73302038293332,3.50953240180388,6.82551936479285,3.95748854847625,2.44612355018035,5.35195926669985,7.61142591945827,7.15459790080786,4.13348517147824,7.53554466878995,3.32226169994101,0.595833789557219,1.16116170305759,8.4633900388144,4.7214942262508,8.12141260132194,8.72489826753736,5.40654454147443,5.98271148977801,7.87499210331589,2.56186842918396,3.58810307225212,6.7322818050161,4.14935291977599,1.54942688066512,0.389872617088258,6.03859134949744,4.26270588068292,7.01777270529419,7.81113585457206,4.86874733585864,0.832332912832499,7.54672965500504,9.46896468754858,5.47171618789434,9.00939524173737,0.180797921493649,8.3667232748121,4.83566786162555,8.43035427853465,7.61578659294173,8.7122713518329,3.57755715260282,1.03460115380585,3.76266051083803,2.99224081914872,2.69608675502241],[1.03033750550821,3.49928601877764,1.90783674130216,6.81743914959952,6.05570799671113,2.01759032672271,6.16770038148388,0.85653193295002,5.22837098222226,2.62551738414913,6.15726951509714,1.04140724986792,0.660300743766129,2.50602525891736,2.84439619630575,1.26511342823505,5.07592364680022,7.07909861579537,6.57346479594707,9.23131354385987,4.53600972425193,0.528082167729735,0.904762719292194,0.868395061697811,7.85493856994435,9.84122437192127,8.20175454486161,4.43450349150226,0.679749541450292,7.73195052519441,0.863546216860414,7.74693290004507,7.06157347653061,2.54584950627759,0.391327070537955,9.70659002661705,0.166951469145715,5.79503622837365,2.30734365060925,9.94919320102781,1.21309166541323,2.30212324066088,0.455679276492447,5.57305719237775,6.84029236901551,4.06006630277261,8.59013166744262,6.21987497201189,7.94551241677254,4.3782295868732,2.27957883151248,5.07842781720683,2.61833775788546,7.47993514640257,1.54877677094191,0.501124965958297,7.66037524444982,0.129487835802138,1.7664379067719,9.58459825720638,0.464249246288091,8.75544037437066,1.38847909867764,8.54488976765424,5.90773260220885,9.40319176297635,2.21672861371189,7.2289831424132,7.53252085996792,6.6522910585627,3.64803099539131,4.73145724507049,2.22020831424743,7.40607004845515,1.97320428676903,5.25576932122931,9.51609620125964,6.35575925698504,9.39066640799865,3.51511656772345],["run_1.csv","run_1.csv","run_1.csv","run_1.csv","run_1.csv","run_1.csv","run_1.csv","run_1.csv","run_1.csv","run_1.csv","run_2.csv","run_2.csv","run_2.csv","run_2.csv","run_2.csv","run_2.csv","run_2.csv","run_2.csv","run_2.csv","run_2.csv","run_3.csv","run_3.csv","run_3.csv","run_3.csv","run_3.csv","run_3.csv","run_3.csv","run_3.csv","run_3.csv","run_3.csv","run_4.csv","run_4.csv","run_4.csv","run_4.csv","run_4.csv","run_4.csv","run_4.csv","run_4.csv","run_4.csv","run_4.csv","run_5.csv","run_5.csv","run_5.csv","run_5.csv","run_5.csv","run_5.csv","run_5.csv","run_5.csv","run_5.csv","run_5.csv","run_6.csv","run_6.csv","run_6.csv","run_6.csv","run_6.csv","run_6.csv","run_6.csv","run_6.csv","run_6.csv","run_6.csv","run_7.csv","run_7.csv","run_7.csv","run_7.csv","run_7.csv","run_7.csv","run_7.csv","run_7.csv","run_7.csv","run_7.csv","run_8.csv","run_8.csv","run_8.csv","run_8.csv","run_8.csv","run_8.csv","run_8.csv","run_8.csv","run_8.csv","run_8.csv"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>SUBID<\/th>\n      <th>freezing<\/th>\n      <th>running<\/th>\n      <th>grooming<\/th>\n      <th>run<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"tp","columnDefs":[{"className":"dt-right","targets":[2,3,4]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 </div>
 <div id="map-is-similar-to-group_by-for-dataframes" class="section level2">
 <h2><code>map</code> is similar to <code>group_by</code> for dataframes</h2>
@@ -515,160 +516,22 @@ grooming_sd
 <tbody>
 <tr>
 <td style="text-align:left;">
-./run_1.csv
-</td>
-<td style="text-align:right;">
-4.2
-</td>
-<td style="text-align:right;">
-1.9
-</td>
-<td style="text-align:right;">
-5.8
-</td>
-<td style="text-align:right;">
-3.7
-</td>
-<td style="text-align:right;">
-6.3
-</td>
-<td style="text-align:right;">
-2.5
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-./run_2.csv
-</td>
-<td style="text-align:right;">
-3.7
-</td>
-<td style="text-align:right;">
-2.2
-</td>
-<td style="text-align:right;">
-3.5
-</td>
-<td style="text-align:right;">
-2.9
-</td>
-<td style="text-align:right;">
-4.3
-</td>
-<td style="text-align:right;">
-2.7
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-./run_3.csv
-</td>
-<td style="text-align:right;">
-8.6
-</td>
-<td style="text-align:right;">
-3.6
-</td>
-<td style="text-align:right;">
-4.3
-</td>
-<td style="text-align:right;">
-2.1
-</td>
-<td style="text-align:right;">
-5.3
-</td>
-<td style="text-align:right;">
-3.4
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-./run_4.csv
-</td>
-<td style="text-align:right;">
-7.6
-</td>
-<td style="text-align:right;">
-4.2
-</td>
-<td style="text-align:right;">
-5.7
-</td>
-<td style="text-align:right;">
-3.4
-</td>
-<td style="text-align:right;">
-4.8
-</td>
-<td style="text-align:right;">
-2.5
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-./run_5.csv
-</td>
-<td style="text-align:right;">
-9.6
-</td>
-<td style="text-align:right;">
-5.8
-</td>
-<td style="text-align:right;">
-5.1
-</td>
-<td style="text-align:right;">
-3.0
-</td>
-<td style="text-align:right;">
-4.3
-</td>
-<td style="text-align:right;">
-2.8
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-./run_6.csv
-</td>
-<td style="text-align:right;">
-7.5
+run_1.csv
 </td>
 <td style="text-align:right;">
 3.3
 </td>
 <td style="text-align:right;">
-5.0
+1.4
 </td>
 <td style="text-align:right;">
-2.4
+3.7
 </td>
 <td style="text-align:right;">
-5.8
+3.0
 </td>
 <td style="text-align:right;">
-2.1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-./run_7.csv
-</td>
-<td style="text-align:right;">
-12.3
-</td>
-<td style="text-align:right;">
-5.6
-</td>
-<td style="text-align:right;">
-5.5
-</td>
-<td style="text-align:right;">
-2.6
-</td>
-<td style="text-align:right;">
-3.9
+3.6
 </td>
 <td style="text-align:right;">
 2.3
@@ -676,29 +539,199 @@ grooming_sd
 </tr>
 <tr>
 <td style="text-align:left;">
-./run_8.csv
+run_2.csv
 </td>
 <td style="text-align:right;">
-13.0
+4.5
 </td>
 <td style="text-align:right;">
-6.6
+3.8
 </td>
 <td style="text-align:right;">
-4.8
+4.5
 </td>
 <td style="text-align:right;">
-2.7
+3.5
+</td>
+<td style="text-align:right;">
+4.2
+</td>
+<td style="text-align:right;">
+3.0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+run_3.csv
+</td>
+<td style="text-align:right;">
+7.9
+</td>
+<td style="text-align:right;">
+5.1
+</td>
+<td style="text-align:right;">
+5.4
+</td>
+<td style="text-align:right;">
+2.9
+</td>
+<td style="text-align:right;">
+4.6
+</td>
+<td style="text-align:right;">
+3.7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+run_4.csv
+</td>
+<td style="text-align:right;">
+10.4
+</td>
+<td style="text-align:right;">
+4.9
 </td>
 <td style="text-align:right;">
 4.7
 </td>
 <td style="text-align:right;">
-2.6
+1.8
+</td>
+<td style="text-align:right;">
+4.7
+</td>
+<td style="text-align:right;">
+3.8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+run_5.csv
+</td>
+<td style="text-align:right;">
+8.3
+</td>
+<td style="text-align:right;">
+5.7
+</td>
+<td style="text-align:right;">
+5.4
+</td>
+<td style="text-align:right;">
+3.0
+</td>
+<td style="text-align:right;">
+4.8
+</td>
+<td style="text-align:right;">
+2.8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+run_6.csv
+</td>
+<td style="text-align:right;">
+11.3
+</td>
+<td style="text-align:right;">
+6.3
+</td>
+<td style="text-align:right;">
+4.4
+</td>
+<td style="text-align:right;">
+2.4
+</td>
+<td style="text-align:right;">
+3.9
+</td>
+<td style="text-align:right;">
+3.4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+run_7.csv
+</td>
+<td style="text-align:right;">
+7.7
+</td>
+<td style="text-align:right;">
+4.6
+</td>
+<td style="text-align:right;">
+5.7
+</td>
+<td style="text-align:right;">
+3.2
+</td>
+<td style="text-align:right;">
+5.8
+</td>
+<td style="text-align:right;">
+3.3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+run_8.csv
+</td>
+<td style="text-align:right;">
+11.3
+</td>
+<td style="text-align:right;">
+7.4
+</td>
+<td style="text-align:right;">
+5.2
+</td>
+<td style="text-align:right;">
+2.8
+</td>
+<td style="text-align:right;">
+5.4
+</td>
+<td style="text-align:right;">
+2.7
 </td>
 </tr>
 </tbody>
 </table>
+</div>
+<div id="proceed-to-estimate-the-rm-anova" class="section level2">
+<h2>Proceed to estimate the RM-ANOVA</h2>
+<p>A great tutorial <a href="https://www.datanovia.com/en/lessons/repeated-measures-anova-in-r/">here</a></p>
+<pre class="r"><code># prepare using gather
+ready4ANOVA &lt;- alldata %&gt;% 
+  gather(key = &quot;action&quot;, value = &quot;time&quot;, freezing, running, grooming)
+
+
+# prepare using pivot_longer
+ready4ANOVA &lt;- alldata %&gt;% 
+  pivot_longer(cols = where(is.numeric), names_to = &quot;action&quot;, values_to = &quot;time&quot;)
+
+library(ggpubr)
+ggboxplot(ready4ANOVA, x = &quot;action&quot;, y = &quot;time&quot;, color = &quot;run&quot;)</code></pre>
+<p><img src="map_demonstration_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<pre class="r"><code>library(rstatix)
+
+res.aov &lt;- anova_test(
+  data = ready4ANOVA,
+  dv = time,
+  wid = SUBID,
+  within = c(run,action)
+)
+
+get_anova_table(res.aov)</code></pre>
+<pre><code>## ANOVA Table (type III tests)
+## 
+##       Effect DFn DFd    F       p p&lt;.05   ges
+## 1        run   7  63  2.8 1.3e-02     * 0.092
+## 2     action   2  18 20.2 2.5e-05     * 0.156
+## 3 run:action  14 126  1.8 5.1e-02       0.101</code></pre>
 </div>
 
 
